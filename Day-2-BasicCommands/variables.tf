@@ -5,7 +5,7 @@ variable "ami_id" {
 
 variable "type" {
   type = string
-  default = "t2.nano"
+  default = ""
 }
 
 variable "key" {
