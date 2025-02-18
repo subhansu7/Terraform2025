@@ -38,6 +38,7 @@ resource "aws_route_table_association" "public_subnet_assoc" {
 resource "aws_subnet" "prod_private" {
     vpc_id = aws_vpc.prod.id
     cidr_block = "10.0.1.0/24"
+    #map_public_ip_on_launch = true  --- can be set to make  all EC2 instances in this subnet public IP.
     tags = {
       Name = "pvt_subnet"
     }  
@@ -110,7 +111,7 @@ resource "aws_instance" "name" {
     key_name = "key-n-virginia"
     subnet_id = aws_subnet.prod.id
     vpc_security_group_ids = [aws_security_group.prod.id]
-    associate_public_ip_address = true #Enabling EC2 instance to get public IP.
+    associate_public_ip_address = true #Enabling EC2 instance to get public IP. 
     tags = {
         Name = "EC2-terraform-public"
         }  
