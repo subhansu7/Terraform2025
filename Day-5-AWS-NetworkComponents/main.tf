@@ -79,22 +79,28 @@ resource "aws_security_group" "prod" {
     vpc_id = aws_vpc.prod.id
 
     ingress {
-        from_port = 443
+        from_port = 443 # from and to port same means only port no 443 allowed for HTTPS
         to_port = 443
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/24"]
+        cidr_blocks = ["0.0.0.0/0"]
     }
     ingress {
-        from_port = 22 # from and to port same meanss only port no 22 aalowed
+        from_port = 22 # from and to port same means only port no 22 allowed for SSH
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/24"]
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress {
+        from_port = 80 # from and to port same means only port no 22 allowed for http
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = ["0.0.0.0/24"]
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }
 #Create public instance
@@ -104,6 +110,7 @@ resource "aws_instance" "name" {
     key_name = "key-n-virginia"
     subnet_id = aws_subnet.prod.id
     vpc_security_group_ids = [aws_security_group.prod.id]
+    associate_public_ip_address = true #Enabling EC2 instance to get public IP.
     tags = {
         Name = "EC2-terraform-public"
         }  
