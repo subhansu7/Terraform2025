@@ -13,7 +13,14 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
   }
 }
 
-resource "aws_s3_bucket" "example" {
-  bucket = "my-unique-779-s3-bucket"
+resource "aws_s3_bucket" "dev" {
+  bucket = "my-unique-1237-s3-bucket"
 
+}
+
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.dev.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
