@@ -16,7 +16,7 @@ type = string
 variable "parameter_group_name" {
     type = string 
 }
-variable "password " {
+variable "password" {
 type = string  
 }
 variable "main_db_version" {
