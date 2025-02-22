@@ -18,23 +18,20 @@ module "primary_db" {
   #https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest?tab=inputs
 
   identifier = "demodb"
-
   engine            = "mysql"
   engine_version    = "5.7"
   instance_class    = "db.t3.micro"
   allocated_storage = 5
-
   db_name  = "demodb"
   username = "user"
   password = "Admin1234"
   port     = "3306"
-
   iam_database_authentication_enabled = true
-
   vpc_security_group_ids = ["sg-04730508ba3fc160b"]
-
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
+  family = "mysql5.7"    # DB parameter group  
+  major_engine_version = "5.7" # DB option group
 
   # Enhanced Monitoring - see example for details on how to create the role
   # by yourself, in case you don't want to create it automatically
@@ -51,18 +48,8 @@ module "primary_db" {
   # DB subnet group
   create_db_subnet_group = true
   subnet_ids             = ["subnet-06a25de4f3a26ecf5", "subnet-0118d1eac335c637b"]
-
-  #db_subnet_group_name     = aws_db_subnet_group.prod.id
-
-  # DB parameter group
-  family = "mysql5.7"
-
-  # DB option group
-  major_engine_version = "5.7"
-
   # Database Deletion Protection
   deletion_protection = false
-
   backup_retention_period = 7
   manage_master_user_password = false
   skip_final_snapshot = true
@@ -80,21 +67,15 @@ module "read_replica" {
   publicly_accessible            = false
   major_engine_version           = "5.7"
   family                         = "mysql5.7"
-  #replicate_source_db           = "demodb"
   replicate_source_db            = module.primary_db.db_instance_identifier
-
   vpc_security_group_ids         = ["sg-04730508ba3fc160b"]
-  
-
   # Ensure consistency with primary database configuration
   maintenance_window             = "Mon:00:00-Mon:03:00"
   backup_window                  = "03:00-06:00"
-
   tags = {
     Owner       = "user"
     Environment = "dev"
   }
-
   skip_final_snapshot = true
   deletion_protection = false
 }
