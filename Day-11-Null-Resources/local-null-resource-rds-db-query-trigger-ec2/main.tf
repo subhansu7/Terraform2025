@@ -11,7 +11,7 @@ resource "aws_db_instance" "my_rds" {
   db_name                 = "mydatabase"
   username                = "admin"
   password                = "Password123"
-  publicly_accessible     = false
+  publicly_accessible     = true
   skip_final_snapshot     = true
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
@@ -37,7 +37,7 @@ resource "aws_security_group" "rds_sg" {
 
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "rds-subnet-group"
-  subnet_ids = ["subnet-038c77dfb92712301","subnet-0643b24c87e54fa25"]
+  subnet_ids = ["subnet-0118d1eac335c637b","subnet-03d8d7b4909003cc2"]
 }
 
 resource "null_resource" "db_initializer" {
@@ -45,11 +45,8 @@ resource "null_resource" "db_initializer" {
 
   provisioner "local-exec" {
     command = <<EOT
-mysql -h ${aws_db_instance.my_rds.address} \
-      -u admin \
-      -ppassword123 \
-      -e "source ./initialize_db.sql"
-EOT
+    mysql -h ${aws_db_instance.my_rds.address} -u admin -pPassword123 < ./initialize_db.sql
+    EOT
   }
 
   triggers = {
