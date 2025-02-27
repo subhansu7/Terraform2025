@@ -1,3 +1,4 @@
+# Example-1 Same names #############
 # resource "aws_instance" "name" {
 #     ami = "ami-085ad6ae776d8f09c"
 #     instance_type = "t2.micro"
@@ -13,31 +14,31 @@
 # }
 
 
-############################### Example-2 Different names #############
-variable "env" {
-  type    = list(string) # List of string to hold different names of EC2 instances
-  default = [ "dev", "prod"]
-}
+# Example-2 Different names #############
+# variable "env" {
+#   type    = list(string) # List of string to hold different names of EC2 instances
+#   default = [ "dev", "prod"]
+# }
 
-#Dev-0, prod-1, test-2
-#Prod, dev, test created in sequence
+# #Dev-0, prod-1, test-2
+# #Prod, dev, test created in sequence
 
 
-#resource will be created as per sequence of names in list
+# #resource will be created as per sequence of names in list
 
-resource "aws_instance" "name" {
-    ami = "ami-085ad6ae776d8f09c"
-    instance_type = "t2.micro"
-    key_name = "key-n-virginia"
-    availability_zone = "us-east-1a"
-    count = length(var.env)  # Count will be equal to length of list
+# resource "aws_instance" "name" {
+#     ami = "ami-085ad6ae776d8f09c"
+#     instance_type = "t2.micro"
+#     key_name = "key-n-virginia"
+#     availability_zone = "us-east-1a"
+#     count = length(var.env)  # Count will be equal to length of list
 
-    tags = {
-      Name = var.env[count.index]
-    }
-}
+#     tags = {
+#       Name = var.env[count.index]
+#     }
+# }
 
-# ## example-2 with variables list of string 
+# Example-4 with variables list of string 
 
 # variable "ami" {
 #   type    = string
@@ -65,13 +66,13 @@ resource "aws_instance" "name" {
 #   }
 # }
 
-#example-3 creating IAM users 
-# variable "user_names" {
-#   description = "IAM usernames"
-#   type        = list(string)
-#   default     = ["user1", "user2", "user3"]
-# }
-# resource "aws_iam_user" "example" {
-#   count = length(var.user_names)
-#   name  = var.user_names[count.index]
-# }
+#example-5 creating IAM users 
+variable "user_names" {
+  description = "IAM usernames"
+  type        = list(string)
+  default     = ["user1", "user2", "user3"]
+}
+resource "aws_iam_user" "example" {
+  count = length(var.user_names)
+  name  = var.user_names[count.index]
+}

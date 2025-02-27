@@ -63,11 +63,24 @@ provider "aws" {
 } 
 
 
-#  resource "aws_s3_bucket" "dev" {
-#     bucket = "statefile-configuresss"
-    
-  
+# Example-3 with numeric condition.
+# variables.tf
+# variable "ami" {
+#   type    = string
+#   default = "ami-0230bd60aa48260c6"
 # }
 
-# #after run this will get error like The variable 'aws_region' must be one of the following regions: us-west-2,│ eu-west-1, so it will allow any one region defined above in conditin block
+# variable "instance_type" {
+#   type = string
+#   default = "t2.nano"
+# }
 
+# # main.tf
+# resource "aws_instance" "dev" {
+#   ami           = var.ami
+#   instance_type = var.instance_type
+#   count         = var.instance_type == "t2.micro" ? 1 : 0
+#   tags = {
+#     Name = "dev_server"
+#   }
+# }
